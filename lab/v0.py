@@ -10,9 +10,10 @@ import json
 from pathlib import Path
 from typing import Any
 
-from openai import OpenAI
+from langfuse.openai import OpenAI
 
 from .metrics import TokenMeter
+from .observability import traced_tool_call
 from .tools import TOOL_SCHEMAS, RetailWorld
 
 
@@ -76,7 +77,7 @@ class V0Agent:
                 action = {"name": call.name, "arguments": arguments}
                 self.actions.append(action)
                 try:
-                    result = self.world.execute(call.name, arguments)
+                    result = traced_tool_call(self.world, call.name, arguments)
                     output = json.dumps(result, ensure_ascii=False)
                 except Exception as exc:
                     output = json.dumps({"error": str(exc)})
