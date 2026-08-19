@@ -9,6 +9,7 @@ import argparse
 import json
 from pathlib import Path
 
+from lab.observability import flush_traces, trace_experiment
 from lab.user_sim import UserSimulator
 from lab.v0 import V0Agent
 
@@ -39,6 +40,7 @@ def action_coverage(expected: list[dict], observed: list[dict]) -> tuple[int, in
     return matched, len(wanted)
 
 
+@trace_experiment
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--task", default="0")
@@ -103,4 +105,7 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    finally:
+        flush_traces()
