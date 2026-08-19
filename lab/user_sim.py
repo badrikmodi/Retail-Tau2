@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from openai import OpenAI
+from langfuse.openai import OpenAI
 
 
 class UserSimulator:
